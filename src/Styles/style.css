@@ -1,0 +1,24 @@
+.content {
+  min-height: calc(100vh - 70px - 17px);
+  padding: 10px;
+}
+.content .inputSearch {
+  border: 1px solid black;
+}
+
+.movies {
+  display: grid;
+  grid-template-columns: repeat(autofill, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.Mycard {
+  height: 300px;
+  width: 300px;
+}
+
+.search-btn {
+  position: absolute;
+  top: 5rem;
+  right: 1.5rem;
+}/*# sourceMappingURL=style.css.map */
