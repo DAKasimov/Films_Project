@@ -2,23 +2,16 @@ import { Component } from "react"
 import { MovieCards } from "../Components/movieCards"
 import { Preloader } from "../Components/Preloader"
 import { Search } from "../Components/Search"
+import { useState, useEffect } from "react"
 
 const API_KEY = process.env.REACT_APP_API_KEY
 
-class Main extends Component {
-  state = {
-    movies: [],
-    inputValue: "",
-    loading: true,
-  }
+const Main = () => {
 
-  componentDidMount() {
-    fetch(`https://www.omdbapi.com/?apikey=${API_KEY}&s=matrix`)
-      .then((response) => response.json())
-      .then((data) => this.setState({ movies: data.Search, loading: false }))
-  }
+  const [movies, setMovies] = useState([])
+  const [loading, setLoading] = useState(true)
 
-  searchMovies = (str, type = "all") => {
+  const searchMovies = (str, type = "all") => {
 
     fetch(
       `https://www.omdbapi.com/?apikey=${API_KEY}&s=${str}${
@@ -26,22 +19,35 @@ class Main extends Component {
       }`
     )
       .then((response) => response.json())
-      .then((data) => this.setState({ movies: data.Search, loading: false }))
+      .then((data) => {
+        setMovies(data.Search)
+        setLoading(false)
+      })
   }
 
-  render() {
-    return this.state.loading ? (
+
+  useEffect(()=>{
+    fetch(`https://www.omdbapi.com/?apikey=${API_KEY}&s=matrix`)
+      .then((response) => response.json())
+      .then((data) => {
+        setMovies(data.Search)
+        setLoading(false)
+      })}
+  , []) 
+    
+  
+    return loading ? (
       <div>
         <Preloader />
       </div>
     ) : (
       <div>
-        <Search searchMovies={this.searchMovies} />
+        <Search searchMovies={searchMovies} />
 
-        <MovieCards movies={this.state.movies} />
+        <MovieCards movies={movies} />
       </div>
     )
   }
-}
+
 
 export { Main }
